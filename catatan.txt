@@ -1,0 +1,8 @@
+page untuk autentikasi OTP
+page untuk forget password (email,new password, confirm new password)
+page profile
+page dashboard
+
+
+dokumentasi postman BE : 
+https://documenter.getpostman.com/view/10922600/Szzj7xC8

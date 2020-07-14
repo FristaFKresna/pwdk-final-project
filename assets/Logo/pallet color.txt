@@ -1,0 +1,4 @@
+main color : #009fff
+secondary color : #E0DEDE
+
+https://www.color-hex.com/color-palette/93964
