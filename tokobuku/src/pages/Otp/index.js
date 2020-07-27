@@ -6,15 +6,26 @@ import { colors } from '../../utils'
 import Axios from 'axios'
 import { API_URL } from '../../supports/constants/urlApi'
 import { connect } from 'react-redux'
+import { saveUserData } from './../../redux/actions/userAction';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Otp = (props) => {
 
     const [code, setCode] = useState(null)
 
+    const storeData = async (value) => {
+        try {
+          const jsonValue = JSON.stringify(value)
+          await AsyncStorage.setItem('data_user', jsonValue)
+          console.log('success async storage')
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
     const verifyBtn = () => {
         let data = {                            /// (PAKE TOKEN KALO KEBURU)
-            id : props.user.id,
-            email : props.user.email,
+            email : props.route.params.email,
             otp : Number(code)
         }
         console.log(data)
@@ -22,8 +33,18 @@ const Otp = (props) => {
             Axios.post(API_URL+'auth/verify', data)
             .then((res)=>{
                 if(!res.data.error){
-                    Alert.alert(res.data.message)
-                    props.navigation.navigate('Home')
+                    Axios.post(API_URL+'auth/login', {email : props.route.params.email, password : props.route.params.password})
+                    .then((res)=>{
+                        if(res.data !== undefined || res.data !== null){
+                            Alert.alert(res.data.message)
+                            storeData(res.data)
+                            props.saveUserData(res.data)
+                        }
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
+
                 }else{
                     Alert.alert(res.data.message)
                 }
@@ -41,9 +62,8 @@ const Otp = (props) => {
             newOtp += Math.round(Math.random() * 9)
         }
 
-        let data = {
-            id : props.user.id,                          /// (PAKE TOKEN KALO KEBURU)
-            email : props.user.email,
+        let data = {                      
+            email : props.route.params.email,                   /// (PAKE TOKEN KALO KEBURU)
             otp : Number(newOtp)
         }
 
@@ -51,7 +71,7 @@ const Otp = (props) => {
         .then((res)=>{
             if(!res.data.error){
                 Alert.alert(res.data.message)
-                props.navigation.replace('Otp')
+                props.navigation.replace('Otp',{email : props.route.params.email,password : props.route.params.password})
             }
         })
         .catch((err)=>{
@@ -77,13 +97,7 @@ const Otp = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return{
-        user : state.user.data
-    }
-}
-
-export default connect(mapStateToProps)(Otp)
+export default connect(null, {saveUserData})(Otp)
 
 const styles = StyleSheet.create({
     page: {

@@ -4,10 +4,7 @@ import { Button, Gap, Header, Input } from '../../components'
 import { colors } from '../../utils'
 import Validator from 'validator'
 import { API_URL } from '../../supports/constants/urlApi'
-import { connect } from 'react-redux'
-import { saveUserData } from './../../redux/actions/userAction'
 import Axios from 'axios'
-import AsyncStorage from '@react-native-community/async-storage';
 
 const Register = (props) => {
 
@@ -21,17 +18,6 @@ const Register = (props) => {
         for(var i = 0; i < 4; i++){
             otp += Math.round(Math.random() * 9)
         }
-
-        const storeData = async (value) => {
-            try {
-              const jsonValue = JSON.stringify(value)
-              await AsyncStorage.setItem('data_user', jsonValue)
-              console.log('success async storage')
-            } catch (e) {
-              console.log(e)
-            }
-          }
-
 
         if(username && email && password && confirm){
             if(!Validator.isEmail(email)){
@@ -53,10 +39,7 @@ const Register = (props) => {
             .then((res)=>{
                 if(!res.data.error){
                     Alert.alert(res.data.message)
-                    props.saveUserData(res.data)
-                    storeData(res.data)
-                    console.log(res.data)
-                    props.navigation.navigate('Otp')
+                    props.navigation.navigate('Otp', {email : email, password : password})
                 }else{
                     Alert.alert(res.data.message)
                 }
@@ -95,7 +78,7 @@ const Register = (props) => {
     )
 }
 
-export default connect(null,{saveUserData})(Register)
+export default Register
 
 const styles = StyleSheet.create({
     page: {
