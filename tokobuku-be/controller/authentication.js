@@ -108,14 +108,14 @@ const verify = (req,res) => {
 
     const data = req.body
 
-    let sql = 'select * from users where id = ?'
-    db.query(sql, data.id, (err, result)=>{
+    let sql = 'select * from users where email = ?'
+    db.query(sql, data.email, (err, result)=>{
         try{
             if(err) throw err
 
             if(Number(data.otp) === Number(result[0].otp)){
-                let sqlUpdate = 'update users set isVerified = 1 where id = ? and email = ?;'
-                db.query(sqlUpdate, [data.id, data.email], (err, result)=>{
+                let sqlUpdate = 'update users set isVerified = 1 where email = ?;'
+                db.query(sqlUpdate, [data.email], (err, result)=>{
                     try{
                         if(err) throw err
                         res.json({
@@ -151,8 +151,8 @@ const resendOtp = (req,res) => {
     const data = req.body
     console.log(data)
 
-    let sql = 'update users set otp = ? where id = ? and email = ?'
-    db.query(sql, [data.otp, data.id, data.email], (err,result)=>{
+    let sql = 'update users set otp = ? where email = ?'
+    db.query(sql, [data.otp, data.email], (err,result)=>{
         try{
             if(err) throw err
             
@@ -186,10 +186,8 @@ const resendOtp = (req,res) => {
 
 const login = (req,res) => {
     const data = req.body
-    console.log(data)
     const afterHashing = passwordHasher(data.password)
     data.password = afterHashing
-    console.log('masuk')
     let sql = 'select * from users where email = ? and password = ?'
     db.query(sql, [data.email, data.password], (err, result)=>{
         try{
@@ -276,8 +274,8 @@ const resetPassword = (req,res) => {
     data.password = afterHashing
 
     // console.log(dataToken)
-    const sql = 'update users set ? where id = ? and email = ?'
-    db.query(sql, [{password:data.password}, data.id, data.email], (err,result)=>{
+    const sql = 'update users set ? where email = ?'
+    db.query(sql, [{password:data.password}, data.email], (err,result)=>{
         try{
             if(err) throw err
             res.json({
