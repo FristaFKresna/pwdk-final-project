@@ -5,6 +5,12 @@ A full-stack ecommerce app that sell books from various authors and publishers.
 <br/>
 This is a group final project at Purwadhika Coding School, I build this app with 2 of my classmates (Agfan & Giran) in 10 days and presented it at the last day. I realize that this project is far from perfect, so I will learn and practice more in the further.
 
+Please kindly see my other projects, thank you.<br/>
+
+https://github.com/FristaFKresna/proto01 <br/>
+
+https://github.com/FristaFKresna/Personal-Web
+
 ## Features for User (Mobile-Android)
 
 ### `Authentication`
