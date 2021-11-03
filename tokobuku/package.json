@@ -33,7 +33,7 @@
     "react-number-format": "^4.4.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "validator": "^13.1.1"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
